@@ -1,0 +1,96 @@
+﻿<Window x:Class="piogi52.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:piogi52"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,369,0" Grid.RowSpan="2">
+            <Label Content="List of enemies:"/>
+            <ListBox ItemsSource="{Binding enemies}" DisplayMemberPath="Name" 
+                     Name="EnemyListBox" Height="300"/>
+            <UniformGrid Columns="2">
+                <Button Height="30" Content="Save" Background="Coral" Click="ButtonSave_Click"/>
+                <Button  Content="Load" Background="Bisque" Click="ButtonLoad_Click"/>
+            </UniformGrid>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,246,0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <UniformGrid Grid.Row="0" Columns="2">
+                <StackPanel>
+                    <Label Content="Enemy icon:"/>
+                    <Image Name="EnemyIcon" Height="100" Width="100" Margin="20"
+                           Source="{Binding ElementName=EnemyListBox, Path=SelectedItem.IconPath}"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Icon name:" Height="30"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.IconName, Mode=OneWay}"
+                             Height="30" IsEnabled="False" Background="LightGray"/>
+                    <Label Content="Enemy Name:" Height="30"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.Name, Mode=TwoWay}"
+                             Height="30"/>
+                </StackPanel>
+            </UniformGrid>
+
+            <UniformGrid Grid.Row="1" Columns="2">
+                <StackPanel>
+                    <Label Content="Base life:"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.BaseLife, Mode=TwoWay}"
+                             Height="30"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Base gold:"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.BaseGold, Mode=TwoWay}"
+                             Height="30"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Life modifier:"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.LifeModifier, Mode=TwoWay}"
+                             Height="30"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Gold modifer:"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.GoldModifier, Mode=TwoWay}" 
+                             Height="30"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Spawn chance (1-100):"/>
+                    <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.SpawnChance, Mode=TwoWay}"
+                             Height="30"/>
+                </StackPanel>
+                <StackPanel Margin="0,17,0,0" Orientation="Horizontal">
+                    <Button Name="Add" Height="30" Width="90" Content="Add" Background="Coral" Click="Add_Click"/>
+                    <Button Name="Remove" Height="30" Width="90" Content="Remove" Background="Bisque" Click="Remove_Click" />
+                </StackPanel>
+            </UniformGrid>
+        </Grid>
+
+        <ListBox Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="IconListBox"
+                 SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectionChanged="IconListBox_OnSelectionChanged">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding IconPath}" Width="100" Height="100"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
