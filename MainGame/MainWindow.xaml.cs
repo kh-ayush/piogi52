@@ -24,9 +24,10 @@ namespace MainGame
         {
             InitializeComponent();
 
-            CBigNum a = new CBigNum("111111900");
-            CBigNum b = new CBigNum("111111100");
-            MessageBox.Show(a.Add(b).ToString());
+            //MessageBox.Show((new CBigNum("3712117") + new CBigNum("15512900")).ToString()); //19225017
+            //MessageBox.Show((new CBigNum("3712117") - new CBigNum("1911900")).ToString());  //1800217
+            //MessageBox.Show((new CBigNum("10014217") / 3).ToString());                      //3338072
+            //MessageBox.Show((new CBigNum("7135654") * 23).ToString());                      //164120042
 
         }
         private void Attack(object sender, MouseButtonEventArgs e)
