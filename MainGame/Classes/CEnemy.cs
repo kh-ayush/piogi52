@@ -3,61 +3,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static piogi52.MainWindow;
 
 namespace MainGame.Classes
 {
     public class Enemy
     {
         public string Name { get; private set; }
-        public int Lvl { get; private set; }
-        public CBigNum Health { get; private set; }
-        public CBigNum MaxHealth { get; private set; }
-        public CBigNum Reward { get; private set; }
-        public CBigNum Damage { get; private set; }
-        public double HealthModifier { get; private set; }
-        public double RewardModifier { get; private set; }
-        public Enemy(string name, int lvl = 1)
+        public CBigNum MaxHitPoints { get; private set; }
+        public CBigNum CurrentHitPoints { get; private set; }
+        public CBigNum GoldReward { get; private set; }
+        public bool IsDead { get; private set; }
+        public IconItem Icon { get; private set; }
+        public Enemy(string name, CBigNum maxHitPoints, CBigNum goldReward, IconItem icon = null)
         {
             Name = name;
-            Lvl = lvl;
+            MaxHitPoints = maxHitPoints;
+            CurrentHitPoints = new CBigNum(maxHitPoints); 
+            GoldReward = goldReward;
+            IsDead = false;
+            Icon = icon;
+        }
+        public bool TakeDamage(CBigNum dmg, out CBigNum goldReward)
+        {
+            goldReward = new CBigNum(0);
 
-            MaxHealth = new CBigNum(50);
-            Health = new CBigNum(50);
-            Damage = new CBigNum(5);
-            Reward = new CBigNum(20);
+            if (IsDead)
+                return false;
+            if (dmg > CurrentHitPoints)
+                dmg = CurrentHitPoints;
 
-            HealthModifier = 1.25;
-            RewardModifier = 1.15;
+            CurrentHitPoints = CurrentHitPoints - dmg;
+
+            if (CurrentHitPoints == new CBigNum(0))
+            {
+                Die();
+                goldReward = GoldReward;
+                return true;
+            }
+
+            return false;
         }
 
-        public void TakeDamage(CBigNum amount)
+        private void Die()
         {
-            if (amount > Health) amount = Health;
-            Health = Health - amount;
-        }
-        public bool IsDead()
-        {
-            return Health == new CBigNum(0);
-        }
-
-        public CBigNum GetReward()
-        {
-            return Reward;
-        }
-
-        public void Respawn()
-        {
-            Lvl++;
-            RecalculateStats();
-            Health = MaxHealth;
-        }
-
-        private void RecalculateStats()
-        {
-            MaxHealth = MaxHealth * HealthModifier;
-            Reward = Reward * RewardModifier;
-            Damage = Damage * 1.1;
+            IsDead = true;
+            CurrentHitPoints = new CBigNum(0);
         }
     }
 }
-
