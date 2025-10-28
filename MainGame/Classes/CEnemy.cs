@@ -16,7 +16,6 @@ namespace MainGame.Classes
         public CBigNum Damage { get; private set; }
         public double HealthModifier { get; private set; }
         public double RewardModifier { get; private set; }
-
         public Enemy(string name, int lvl = 1)
         {
             Name = name;
@@ -36,7 +35,6 @@ namespace MainGame.Classes
             if (amount > Health) amount = Health;
             Health = Health - amount;
         }
-
         public bool IsDead()
         {
             return Health == new CBigNum(0);
@@ -62,3 +60,4 @@ namespace MainGame.Classes
         }
     }
 }
+
