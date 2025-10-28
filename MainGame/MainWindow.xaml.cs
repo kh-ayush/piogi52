@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using MainGame.Classes;
+using System.Collections.ObjectModel;
 
 namespace MainGame
 {
@@ -20,19 +21,75 @@ namespace MainGame
     /// </summary>
     public partial class MainWindow : Window
     {
+        public void normalizeChances() //нормализация шансов выбора объектов, сумма шансов
+                                //должна быть равна 1
+        {
+            double sum = 0;
+            for (int i = 0; i < enemyTemps.enemies.Count; i++)
+                sum += enemyTemps.enemies[i].SpawnChance;
+            for (int i = 0; i < enemyTemps.enemies.Count; i++)
+                enemyTemps.enemies[i].SpawnChance /= sum;
+        }
+        public CEnemyTemplate findByChance(double chance) //поиск объекта по выпавшей вероятности
+        {
+            double sum = 0;
+            for (int i = 0; i < enemyTemps.enemies.Count; i++)
+            {
+                sum += enemyTemps.enemies[i].SpawnChance;
+                if (sum >= chance) return enemyTemps.enemies[i];
+            }
+            return null;
+        }
+        public CEnemyTemplateList enemyTemps;
+        public CEnemyTemplate CurrentTemplate;
+        Random rand = new Random();
+        CEnemy CurrentEnemy;
+        CPlayer Player;
+        
         public MainWindow()
         {
             InitializeComponent();
 
-            //MessageBox.Show((new CBigNum("3712117") + new CBigNum("15512900")).ToString()); //19225017
-            //MessageBox.Show((new CBigNum("3712117") - new CBigNum("1911900")).ToString());  //1800217
-            //MessageBox.Show((new CBigNum("10014217") / 3).ToString());                      //3338072
-            //MessageBox.Show((new CBigNum("7135654") * 23).ToString());                      //164120042
+            enemyTemps = new CEnemyTemplateList();
+            enemyTemps.LoadJson();
+            normalizeChances();
+            CurrentTemplate = findByChance(rand.NextDouble());
+            CurrentEnemy = new CEnemy(CurrentTemplate);
 
+            EnemyInfo.DataContext = CurrentEnemy;
+
+            Player = new CPlayer(
+                1,                    //lvl
+                new CBigNum("0"),     //gold
+                new CBigNum("1"),     //damage
+                1.2,                  //dmgMod
+                new CBigNum("10"),    //upgradeCost
+                1.2);                 //upgradeMod
+            
+            PlayerInfo.DataContext = Player;
         }
         private void Attack(object sender, MouseButtonEventArgs e)
         {
+            CBigNum reward;
+            CurrentEnemy.TakeDamage(Player.Damage, out reward);
+            Player.AddGold(reward);
 
+        }
+        private void UpgradeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Player.TryUpgrade();
+        }
+        private void RepeatButton_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentEnemy = new CEnemy(CurrentTemplate);
+        }
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentEnemy != null & CurrentEnemy.IsDead)
+            {
+                CurrentTemplate = findByChance(rand.NextDouble());
+                CurrentEnemy = new CEnemy(CurrentTemplate);
+            }
         }
     }
 }

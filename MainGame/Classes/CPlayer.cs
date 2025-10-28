@@ -1,32 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MainGame.Classes
 {
-    public class CPlayer
+    public class CPlayer : INotifyPropertyChanged
     {
-        public int Lvl { get; private set; }
-        public CBigNum Gold { get; private set; }
-        public CBigNum Damage { get; private set; }
-        public double DamageModifier { get; private set; }
-        public CBigNum UpgradeCost { get; private set; }
-        public double UpgradeModifier { get; private set; }
-
-        public CPlayer()
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
         {
-            Lvl = 1;
-            Gold = new CBigNum(0);
-            Damage = new CBigNum(10);
-            DamageModifier = 1.0;
-            UpgradeCost = new CBigNum(100);
-            UpgradeModifier = 1.15;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private int lvl;
+        private CBigNum gold;
+        private CBigNum damage;
+        private double damageModifier;
+        private CBigNum upgradeCost;
+        private double upgradeModifier;
 
+        public int Lvl {
+            get => lvl;
+            private set
+            {
+                lvl = value;
+                OnPropertyChanged("Lvl");
+            }
+        }
+        public CBigNum Gold {
+            get => gold;
+            private set
+            {
+                gold = value;
+                OnPropertyChanged("Gold");
+            }
+        }
+        public CBigNum Damage {
+            get => damage;
+            private set
+            {
+                damage = value;
+                OnPropertyChanged("Damage");
+            }
+        }
+        public double DamageModifier {
+            get => damageModifier;
+            private set => damageModifier = value;
+        }
+        public CBigNum UpgradeCost {
+            get => upgradeCost;
+            private set => upgradeCost = value;
+        }
+        public double UpgradeModifier {
+            get => upgradeModifier;
+            private set => upgradeModifier = value;
+        }
+
+        public CPlayer(int lvl, CBigNum gold, CBigNum damage, double damageModifier, CBigNum upgradeCost, double upgradeModifier)
+        {
+            Lvl = lvl;
+            Gold = gold;
+            Damage = damage;
+            DamageModifier = damageModifier; 
+            UpgradeModifier = upgradeModifier;
+            UpgradeCost = upgradeCost;
+        }
         public void AddGold(CBigNum amount)
         {
             Gold = Gold + amount;

@@ -13,34 +13,37 @@
         </Grid.ColumnDefinitions>
 
 
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Name="EnemyInfo">
             <TextBlock Text="Enemy name:" FontSize="16"/>
-            <TextBlock x:Name="EnemyNameText" FontSize="16" Margin="0,5,0,10"/>
+            <TextBlock FontSize="16" Margin="0,5,0,10" Text="{Binding Name}"/>
 
             <TextBlock Text="Enemy hit point:" FontSize="16"/>
-            <TextBlock x:Name="EnemyHPText" FontSize="16" Margin="0,5,0,10"/>
+            <TextBlock FontSize="16" Margin="0,5,0,10" Text="{Binding CurrentHitPoints}"/>
 
             <TextBlock Text="Gold from enemy:" FontSize="16"/>
-            <TextBlock x:Name="EnemyGoldText" FontSize="16" Margin="0,5,0,20"/>
+            <TextBlock FontSize="16" Margin="0,5,0,20" Text="{Binding GoldReward}"/>
 
-            <Image x:Name="EnemyImage" Width="150" Height="150" Margin="0,5,0,10" MouseLeftButtonDown="Attack"/>
+            <Image Source="{Binding Icon}" Width="150" Height="150" 
+                   Margin="0,5,0,10" MouseLeftButtonDown="Attack"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                <Button x:Name="RepeatButton" Content="Repeat" Width="100" Margin="10,0"/>
-                <Button x:Name="NextButton" Content="Next" Width="100" Margin="10,0"/>
+                <Button x:Name="RepeatButton" Content="Repeat" Width="100" Margin="10,0" Click="RepeatButton_Click"/>
+                <Button x:Name="NextButton" Content="Next" Width="100" Margin="10,0" Click="NextButton_Click"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Name="PlayerInfo">
             <TextBlock Text="Level:" FontSize="16"/>
-            <TextBlock x:Name="PlayerLevelText" Text="1" FontSize="16" Margin="0,5,0,10"/>
+            <TextBlock Text="{Binding Lvl}" FontSize="16" Margin="0,5,0,10"/>
 
             <TextBlock Text="Player's gold:" FontSize="16"/>
-            <TextBlock x:Name="PlayerGoldText" Text="0" FontSize="16" Margin="0,5,0,10"/>
+            <TextBlock Text="{Binding Gold}" FontSize="16" Margin="0,5,0,10"/>
 
             <TextBlock Text="Player's damage:" FontSize="16"/>
-            <TextBlock x:Name="PlayerDamageText" Text="1" FontSize="16"  Margin="0,5,0,20"/>
+            <TextBlock Text="{Binding Damage}" FontSize="16"  Margin="0,5,0,20"/>
 
-            <Button x:Name="UpgradeButton" Content="Upgrade" Width="120" Height="35"/>
+            <Button x:Name="UpgradeButton" Content="Upgrade" Width="120" Height="35" Click="UpgradeButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>
