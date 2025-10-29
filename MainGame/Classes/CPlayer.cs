@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -12,7 +13,7 @@ namespace MainGame.Classes
     public class CPlayer : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -29,7 +30,7 @@ namespace MainGame.Classes
             private set
             {
                 lvl = value;
-                OnPropertyChanged("Lvl");
+                OnPropertyChanged();
             }
         }
         public CBigNum Gold {
@@ -37,7 +38,7 @@ namespace MainGame.Classes
             private set
             {
                 gold = value;
-                OnPropertyChanged("Gold");
+                OnPropertyChanged();
             }
         }
         public CBigNum Damage {
@@ -45,7 +46,7 @@ namespace MainGame.Classes
             private set
             {
                 damage = value;
-                OnPropertyChanged("Damage");
+                OnPropertyChanged();
             }
         }
         public double DamageModifier {

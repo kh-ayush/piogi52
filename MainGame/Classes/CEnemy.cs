@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static piogi52.MainWindow;
@@ -12,14 +13,14 @@ namespace MainGame.Classes
     public class CEnemy : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private string name;
         private CBigNum maxHitPoints;
-        private CBigNum curretnHitPoints;
+        private CBigNum currentHitPoints;
         private CBigNum goldReward;
         private bool isDead;
         private string icon;
@@ -28,7 +29,7 @@ namespace MainGame.Classes
             private set 
             {
                 name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged();
             }
         }
         public CBigNum MaxHitPoints { 
@@ -36,11 +37,11 @@ namespace MainGame.Classes
             private set => maxHitPoints = value;
         }   
         public CBigNum CurrentHitPoints { 
-            get => curretnHitPoints;
+            get => currentHitPoints;
             private set
             {
-                curretnHitPoints = value;
-                OnPropertyChanged("CurretnHitPoints");
+                currentHitPoints = value;
+                OnPropertyChanged();
             }
         }
         public CBigNum GoldReward {
@@ -48,7 +49,7 @@ namespace MainGame.Classes
             private set
             {
                 goldReward = value;
-                OnPropertyChanged("GoldReward");
+                OnPropertyChanged();
             }
         }
         public bool IsDead {
@@ -88,20 +89,20 @@ namespace MainGame.Classes
             if (IsDead) return false;
             if (dmg > CurrentHitPoints) dmg = CurrentHitPoints;
 
-            CurrentHitPoints = CurrentHitPoints - dmg;
+            CurrentHitPoints -= dmg;
 
             if (CurrentHitPoints == new CBigNum("0"))
             {
-                Die();
+                IsDead = true;
                 goldReward = GoldReward;
                 return true;
             }
             return false;
         }
-        private void Die()
-        {
-            IsDead = true;
-            CurrentHitPoints = new CBigNum("0");
-        }
+        //private void Die()
+        //{
+        //    IsDead = true;
+        //    CurrentHitPoints = new CBigNum("0");
+        //}
     }
 }

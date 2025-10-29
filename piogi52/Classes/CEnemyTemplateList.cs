@@ -68,11 +68,11 @@ namespace piogi52.Classes
         public void SaveJson()
         {
             string jsonString = JsonSerializer.Serialize(enemies);
-            File.WriteAllText("C:\\Users\\tummy\\source\\repos\\piogi52\\piogi52\\bin\\Debug\\net8.0-windows\\EnemysList.json", jsonString);
+            File.WriteAllText("EnemysList.json", jsonString);
         }
         public void LoadJson()
         {
-            string jsonFromFile = File.ReadAllText("C:\\Users\\tummy\\source\\repos\\piogi52\\piogi52\\bin\\Debug\\net8.0-windows\\EnemysList.json");
+            string jsonFromFile = File.ReadAllText("C:\\Users\\bob2a\\source\\repos\\piogi52\\piogi52\\bin\\Debug\\net8.0-windows\\EnemysList.json");
             JsonDocument doc = JsonDocument.Parse(jsonFromFile);
             foreach (JsonElement element in doc.RootElement.EnumerateArray())
             {

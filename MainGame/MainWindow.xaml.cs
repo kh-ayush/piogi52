@@ -61,7 +61,7 @@ namespace MainGame
             Player = new CPlayer(
                 1,                    //lvl
                 new CBigNum("0"),     //gold
-                new CBigNum("1"),     //damage
+                new CBigNum("2"),     //damage
                 1.2,                  //dmgMod
                 new CBigNum("10"),    //upgradeCost
                 1.2);                 //upgradeMod
@@ -71,9 +71,9 @@ namespace MainGame
         private void Attack(object sender, MouseButtonEventArgs e)
         {
             CBigNum reward;
-            CurrentEnemy.TakeDamage(Player.Damage, out reward);
-            Player.AddGold(reward);
-
+            if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward)) 
+                Player.AddGold(reward);
+            
         }
         private void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {

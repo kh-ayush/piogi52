@@ -203,6 +203,28 @@ namespace MainGame.Classes
         {
             return a.CompareTo(b) < 0;
         }
+        public static bool operator ==(CBigNum a, CBigNum b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+            if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
+
+            return a.CompareTo(b) == 0;
+        }
+        public static bool operator !=(CBigNum a, CBigNum b)
+        {
+            return !(a == b);
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is CBigNum bnum)
+                return CompareTo(bnum) == 0;
+
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return number.GetHashCode();
+        }
 
         public int[] Digits => number.Clone() as int[];
         public static int NumberBase => _base;
