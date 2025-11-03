@@ -1,4 +1,5 @@
-﻿using piogi52.Classes;
+﻿using Microsoft.Win32;
+using piogi52.Classes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -68,22 +69,32 @@ namespace piogi52.Classes
         public void SaveJson()
         {
             string jsonString = JsonSerializer.Serialize(enemies);
-            File.WriteAllText("EnemysList.json", jsonString);
+            
+            OpenFileDialog okno = new OpenFileDialog();
+            if ((bool)okno.ShowDialog())
+            {
+                File.WriteAllText(okno.FileName, jsonString);
+            }
         }
         public void LoadJson()
         {
-            string jsonFromFile = File.ReadAllText("C:\\Users\\bob2a\\source\\repos\\piogi52\\piogi52\\bin\\Debug\\net8.0-windows\\EnemysList.json");
-            JsonDocument doc = JsonDocument.Parse(jsonFromFile);
-            foreach (JsonElement element in doc.RootElement.EnumerateArray())
+            OpenFileDialog okno = new OpenFileDialog();
+            if ((bool)okno.ShowDialog())
             {
-                string name = element.GetProperty("Name").GetString();
-                string iconPath = element.GetProperty("IconPath").GetString();
-                int baseLife = element.GetProperty("BaseLife").GetInt32();
-                double lifeModification = element.GetProperty("LifeModifier").GetDouble();
-                int baseGold = element.GetProperty("BaseGold").GetInt32();
-                double goldModification = element.GetProperty("GoldModifier").GetDouble();
-                double spawnChance = element.GetProperty("SpawnChance").GetDouble();
-                enemies.Add(new CEnemyTemplate(name, iconPath, baseLife, lifeModification, baseGold, goldModification, spawnChance));
+                string jsonFromFile = File.ReadAllText(okno.FileName);
+                JsonDocument doc = JsonDocument.Parse(jsonFromFile);
+
+                foreach (JsonElement element in doc.RootElement.EnumerateArray())
+                {
+                    string name = element.GetProperty("Name").GetString();
+                    string iconPath = element.GetProperty("IconPath").GetString();
+                    int baseLife = element.GetProperty("BaseLife").GetInt32();
+                    double lifeModification = element.GetProperty("LifeModifier").GetDouble();
+                    int baseGold = element.GetProperty("BaseGold").GetInt32();
+                    double goldModification = element.GetProperty("GoldModifier").GetDouble();
+                    double spawnChance = element.GetProperty("SpawnChance").GetDouble();
+                    enemies.Add(new CEnemyTemplate(name, iconPath, baseLife, lifeModification, baseGold, goldModification, spawnChance));
+                }
             }
         }
     }

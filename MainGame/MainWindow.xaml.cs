@@ -73,7 +73,6 @@ namespace MainGame
             CBigNum reward;
             if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward)) 
                 Player.AddGold(reward);
-            
         }
         private void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -85,7 +84,7 @@ namespace MainGame
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentEnemy != null & CurrentEnemy.IsDead)
+            if (CurrentEnemy.IsDead)
             {
                 CurrentTemplate = findByChance(rand.NextDouble());
                 CurrentEnemy = new CEnemy(CurrentTemplate);
