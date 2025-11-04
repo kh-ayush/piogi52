@@ -114,16 +114,16 @@ namespace MainGame.Classes
             if (multiplier == 1) return this.Clone(); 
 
             int[] result = new int[number.Length + Convert.ToString(multiplier).Length];
-            int carry = 0, a = 0;
+            int carry = 0, a = 0; int i = 0;
 
-            for (int i = 0; i < number.Length; i++)
+            for (i = 0; i < number.Length; i++)
             {
                 a = number[number.Length - 1 - i];
                 double multy = (a * multiplier) + carry;
                 result[result.Length - 1 - i] = (int) multy % _base;
                 carry = (int) multy / _base;
             }
-            result[0] = carry;
+            result[result.Length - 1 - i] = carry;
 
             return new CBigNum(result);
         }

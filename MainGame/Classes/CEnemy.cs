@@ -61,7 +61,7 @@ namespace MainGame.Classes
             private set
             {
                 icon = value;
-                OnPropertyChanged("Icon");
+                OnPropertyChanged();
             }
         }
         public CEnemy(string name, CBigNum maxHitPoints, CBigNum goldReward, string icon)
@@ -99,10 +99,13 @@ namespace MainGame.Classes
             }
             return false;
         }
-        //private void Die()
-        //{
-        //    IsDead = true;
-        //    CurrentHitPoints = new CBigNum("0");
-        //}
+        public void RecalculateStats(CEnemyTemplate enemyTemplate)
+        {
+            MaxHitPoints = MaxHitPoints * enemyTemplate.LifeModifier;
+            CurrentHitPoints = MaxHitPoints;
+            GoldReward = GoldReward * enemyTemplate.GoldModifier;
+
+
+        }
     }
 }

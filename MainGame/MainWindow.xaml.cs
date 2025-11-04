@@ -42,9 +42,9 @@ namespace MainGame
         }
         public CEnemyTemplateList enemyTemps;
         public CEnemyTemplate CurrentTemplate;
-        Random rand = new Random();
-        CEnemy CurrentEnemy;
-        CPlayer Player;
+        public Random rand = new Random();
+        public CEnemy CurrentEnemy;
+        public CPlayer Player;
         
         public MainWindow()
         {
@@ -55,6 +55,9 @@ namespace MainGame
             normalizeChances();
             CurrentTemplate = findByChance(rand.NextDouble());
             CurrentEnemy = new CEnemy(CurrentTemplate);
+
+            NextButton.IsEnabled = false;
+            RepeatButton.IsEnabled = false;
 
             EnemyInfo.DataContext = CurrentEnemy;
 
@@ -71,16 +74,25 @@ namespace MainGame
         private void Attack(object sender, MouseButtonEventArgs e)
         {
             CBigNum reward;
-            if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward)) 
+            if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward))
+            {
                 Player.AddGold(reward);
+                NextButton.IsEnabled = true;
+                RepeatButton.IsEnabled = true;
+            }
         }
         private void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
-            Player.TryUpgrade();
+            if (Player.TryUpgrade()) MessageBox.Show("^ LEVEL UP ^"); 
         }
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
-            CurrentEnemy = new CEnemy(CurrentTemplate);
+            if (CurrentEnemy.IsDead)
+            {
+                CurrentEnemy = new CEnemy(CurrentTemplate);
+                CurrentEnemy.RecalculateStats(CurrentTemplate);
+                EnemyInfo.DataContext = CurrentEnemy;
+            }
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
@@ -88,6 +100,8 @@ namespace MainGame
             {
                 CurrentTemplate = findByChance(rand.NextDouble());
                 CurrentEnemy = new CEnemy(CurrentTemplate);
+                CurrentEnemy.RecalculateStats(CurrentTemplate);
+                EnemyInfo.DataContext = CurrentEnemy;
             }
         }
     }

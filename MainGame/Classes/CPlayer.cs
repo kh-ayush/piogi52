@@ -113,7 +113,7 @@ namespace MainGame.Classes
         }
         public CBigNum DealDamage()
         {
-            return CalculateTotalDamage();
+            return Damage;
         }
     }
 }
