@@ -45,7 +45,8 @@ namespace MainGame
         public Random rand = new Random();
         public CEnemy CurrentEnemy;
         public CPlayer Player;
-        
+        public int EnemyCount = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -55,6 +56,7 @@ namespace MainGame
             normalizeChances();
             CurrentTemplate = findByChance(rand.NextDouble());
             CurrentEnemy = new CEnemy(CurrentTemplate);
+            EnemyCount = 0;
 
             NextButton.IsEnabled = false;
             RepeatButton.IsEnabled = false;
@@ -77,6 +79,7 @@ namespace MainGame
             if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward))
             {
                 Player.AddGold(reward);
+                EnemyCount++;
                 NextButton.IsEnabled = true;
                 RepeatButton.IsEnabled = true;
             }
@@ -90,8 +93,10 @@ namespace MainGame
             if (CurrentEnemy.IsDead)
             {
                 CurrentEnemy = new CEnemy(CurrentTemplate);
-                CurrentEnemy.RecalculateStats(CurrentTemplate);
+                CurrentEnemy.RecalculateStats(CurrentTemplate, EnemyCount);
                 EnemyInfo.DataContext = CurrentEnemy;
+                NextButton.IsEnabled = false;
+                RepeatButton.IsEnabled = false;
             }
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -100,8 +105,10 @@ namespace MainGame
             {
                 CurrentTemplate = findByChance(rand.NextDouble());
                 CurrentEnemy = new CEnemy(CurrentTemplate);
-                CurrentEnemy.RecalculateStats(CurrentTemplate);
+                CurrentEnemy.RecalculateStats(CurrentTemplate, EnemyCount);
                 EnemyInfo.DataContext = CurrentEnemy;
+                NextButton.IsEnabled = false;
+                RepeatButton.IsEnabled = false;
             }
         }
     }

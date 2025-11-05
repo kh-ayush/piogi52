@@ -99,13 +99,11 @@ namespace MainGame.Classes
             }
             return false;
         }
-        public void RecalculateStats(CEnemyTemplate enemyTemplate)
+        public void RecalculateStats(CEnemyTemplate enemyTemplate, int lvl)
         {
-            MaxHitPoints = MaxHitPoints * enemyTemplate.LifeModifier;
+            MaxHitPoints = MaxHitPoints * (enemyTemplate.LifeModifier * lvl);
             CurrentHitPoints = MaxHitPoints;
-            GoldReward = GoldReward * enemyTemplate.GoldModifier;
-
-
+            GoldReward = GoldReward * (enemyTemplate.GoldModifier * lvl);
         }
     }
 }
