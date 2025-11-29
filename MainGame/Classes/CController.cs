@@ -76,7 +76,6 @@ namespace MainGame.Classes
             {
                 if (objects[i].isMouseOnObject(mousePos))
                 {
-                    points += objects[i].getPointsValue();
                     CObject CurObj = objects[i];
                     destroyObject(CurObj);
                     return CurObj;

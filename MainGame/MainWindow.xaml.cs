@@ -22,8 +22,7 @@ namespace MainGame
     /// </summary>
     public partial class MainWindow : Window
     {
-        public void normalizeChances() //нормализация шансов выбора объектов, сумма шансов
-                                //должна быть равна 1
+        public void normalizeChances()
         {
             double sum = 0;
             for (int i = 0; i < enemyTemps.enemies.Count; i++)
@@ -31,7 +30,7 @@ namespace MainGame
             for (int i = 0; i < enemyTemps.enemies.Count; i++)
                 enemyTemps.enemies[i].SpawnChance /= sum;
         }
-        public CEnemyTemplate findByChance(double chance) //поиск объекта по выпавшей вероятности
+        public CEnemyTemplate findByChance(double chance)
         {
             double sum = 0;
             for (int i = 0; i < enemyTemps.enemies.Count; i++)
@@ -41,6 +40,7 @@ namespace MainGame
             }
             return null;
         }
+
         public CEnemyTemplateList enemyTemps;
         public CEnemyTemplate CurrentTemplate;
         public Random rand = new Random();
@@ -59,7 +59,14 @@ namespace MainGame
             timer.Interval = TimeSpan.FromMilliseconds(16);
             timer.Tick += UpdateGame;
 
-            Start_Click();
+            controller = new CController(
+                spawnRate: 1,
+                startTime: 0,
+                sceneSize: new System.Drawing.Size(250, 250)
+            );
+
+            timer.Start();
+
             GameCanvas.MouseLeftButtonDown += GameCanvas_MouseLeftButtonDown;
 
             enemyTemps = new CEnemyTemplateList();
@@ -89,15 +96,24 @@ namespace MainGame
             CBigNum reward;
             if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward))
             {
+                timer.Stop();
+
                 Player.AddGold(reward);
                 EnemyCount++;
                 NextButton.IsEnabled = true;
                 RepeatButton.IsEnabled = true;
+
+                controller.Objects.Clear();
+                GameCanvas.Children.Clear();
             }
         }
         private void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
-            Player.TryUpgrade();
+            Player.TryUpgradeDM();
+        }
+        private void UpgradeCD_Click(object sender, RoutedEventArgs e)
+        {
+            Player.TryUpgradeCD();
         }
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
@@ -108,6 +124,8 @@ namespace MainGame
                 EnemyInfo.DataContext = CurrentEnemy;
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
+
+                timer.Start();
             }
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -120,19 +138,9 @@ namespace MainGame
                 EnemyInfo.DataContext = CurrentEnemy;
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
+
+                timer.Start();
             }
-        }
-        private void Start_Click()
-        {
-            GameCanvas.Children.Clear();
-
-            controller = new CController(
-                spawnRate: 1,
-                startTime: 0,
-                sceneSize: new System.Drawing.Size(250, 250)
-            );
-
-            timer.Start();
         }
 
         private void GameCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -167,5 +175,7 @@ namespace MainGame
             foreach (var obj in controller.Objects)
                 GameCanvas.Children.Add(obj.Sprite);
         }
+
+        
     }
 }

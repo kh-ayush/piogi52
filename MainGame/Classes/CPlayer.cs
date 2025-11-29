@@ -19,10 +19,12 @@ namespace MainGame.Classes
         }
 
         private int lvl;
+        private double cooldown;
         private CBigNum gold;
         private CBigNum damage;
         private double damageModifier;
-        private CBigNum upgradeCost;
+        private CBigNum damagecost;
+        private CBigNum cooldowncost;
         private double upgradeModifier;
 
         public int Lvl {
@@ -30,6 +32,14 @@ namespace MainGame.Classes
             private set
             {
                 lvl = value;
+                OnPropertyChanged();
+            }
+        }
+        public double CoolDown {
+            get => cooldown;
+            private set
+            {
+                cooldown = value;
                 OnPropertyChanged();
             }
         }
@@ -53,9 +63,13 @@ namespace MainGame.Classes
             get => damageModifier;
             private set => damageModifier = value;
         }
-        public CBigNum UpgradeCost {
-            get => upgradeCost;
-            private set => upgradeCost = value;
+        public CBigNum DamageCost {
+            get => damagecost;
+            private set => damagecost = value;
+        }
+        public CBigNum CooldownCost {
+            get => cooldowncost;
+            private set => cooldowncost = value;
         }
         public double UpgradeModifier {
             get => upgradeModifier;
@@ -69,19 +83,32 @@ namespace MainGame.Classes
             Damage = damage;
             DamageModifier = damageModifier; 
             UpgradeModifier = upgradeModifier;
-            UpgradeCost = upgradeCost;
+            DamageCost = upgradeCost;
+            CoolDown = 5;
         }
         public void AddGold(CBigNum amount)
         {
             Gold = Gold + amount;
         }
 
-        public bool TryUpgrade()
+        public bool TryUpgradeDM()
         {
-            if (TrySpendGold(UpgradeCost))
+            if (TrySpendGold(DamageCost))
             {
                 Lvl++;
-                RecalculateStats();
+                Damage = Damage * (DamageModifier * Lvl);
+                DamageCost *= UpgradeModifier;
+                return true;
+            }
+            return false;
+        }
+
+        public bool TryUpgradeCD()
+        {
+            if (TrySpendGold(CooldownCost))
+            {
+                CoolDown -= 0.25;
+                CooldownCost *= UpgradeModifier;
                 return true;
             }
             return false;
@@ -96,24 +123,13 @@ namespace MainGame.Classes
             }
             return false;
         }
-
-        public void RecalculateStats()
-        {
-            Damage = CalculateTotalDamage();
-            UpgradeCost = CalculateNextUpgradeCost();
-        }
-
-        public CBigNum CalculateTotalDamage()
-        {
-            return Damage * (DamageModifier * Lvl);
-        }
-        public CBigNum CalculateNextUpgradeCost()
-        {
-            return UpgradeCost * UpgradeModifier;
-        }
         public CBigNum DealDamage()
         {
             return Damage;
+        }
+        public double GetCoolDown()
+        {
+            return CoolDown;
         }
     }
 }

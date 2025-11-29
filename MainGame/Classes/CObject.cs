@@ -11,7 +11,6 @@ namespace MainGame.Classes
         private System.Drawing.Point position;
         private System.Drawing.Size size;
         private double lifetime;
-        private double pointsValue;
         private Ellipse sprite;
 
         public double Lifetime => lifetime;
@@ -32,9 +31,6 @@ namespace MainGame.Classes
             sprite.StrokeThickness = 2;
 
             sprite.RenderTransform = new TranslateTransform(position.X, position.Y);
-
-            //pointsValue = ((1 / this.size.Width) / lifetime) * 1000;
-            pointsValue = 1;
         }
 
         public bool isMouseOnObject(System.Drawing.Point mousePos)
@@ -42,8 +38,6 @@ namespace MainGame.Classes
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(position, size);
             return rect.Contains(mousePos);
         }
-
-        public double getPointsValue() => pointsValue;
 
         public bool updateLifetime(double delta)
         {

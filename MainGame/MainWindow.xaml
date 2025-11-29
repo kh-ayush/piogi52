@@ -54,7 +54,8 @@
             <TextBlock Text="Player's damage:" FontSize="16"/>
             <TextBlock Text="{Binding Damage}" FontSize="16"  Margin="0,5,0,20"/>
 
-            <Button x:Name="UpgradeButton" Content="Upgrade" Width="120" Height="35" Click="UpgradeButton_Click"/>
+            <Button x:Name="UpgradeDamage" Content="Upgrade DM" Width="120" Height="35" Margin="0,5,0,10" Click="UpgradeButton_Click"/>
+            <Button x:Name="UpgradeCD" Content="Upgrade CD" Width="120" Height="35" Click="UpgradeCD_Click" />
         </StackPanel>
     </Grid>
 </Window>
