@@ -20,6 +20,8 @@ namespace MainGame.Classes
 
         private int lvl;
         private double cooldown;
+        private double timeleft;
+        private bool isCD;
         private CBigNum gold;
         private CBigNum damage;
         private double damageModifier;
@@ -37,15 +39,31 @@ namespace MainGame.Classes
         }
         public double CoolDown {
             get => cooldown;
-            private set
+            set
             {
                 cooldown = value;
                 OnPropertyChanged();
             }
         }
+        public bool IsCD {
+            get => isCD;
+            set
+            {
+                isCD = value;
+                OnPropertyChanged();
+            }
+        }
+        public double TimeLeft {
+            get => timeleft;
+            set
+            {
+                timeleft = value;
+                OnPropertyChanged();
+            }
+        }
         public CBigNum Gold {
             get => gold;
-            private set
+            set
             {
                 gold = value;
                 OnPropertyChanged();
@@ -53,7 +71,7 @@ namespace MainGame.Classes
         }
         public CBigNum Damage {
             get => damage;
-            private set
+            set
             {
                 damage = value;
                 OnPropertyChanged();
@@ -84,11 +102,18 @@ namespace MainGame.Classes
             DamageModifier = damageModifier; 
             UpgradeModifier = upgradeModifier;
             DamageCost = upgradeCost;
+            CooldownCost = upgradeCost;
             CoolDown = 5;
+            TimeLeft = CoolDown;
+            IsCD = true;
         }
         public void AddGold(CBigNum amount)
         {
             Gold = Gold + amount;
+        }
+        public void SetCD()
+        {
+            TimeLeft = CoolDown;
         }
 
         public bool TryUpgradeDM()
@@ -127,9 +152,48 @@ namespace MainGame.Classes
         {
             return Damage;
         }
-        public double GetCoolDown()
+        public void AddBonus(PlayerBonus bonus)
         {
-            return CoolDown;
+            bonus.Apply(this); // применяем бонус
+            Bonuses.Add(bonus);
+        }
+
+        private List<PlayerBonus> Bonuses = new List<PlayerBonus>();
+        public void Update(double delta)
+        {
+            if (!IsCD)
+            {
+                TimeLeft -= delta;
+                if (TimeLeft <= 0)
+                {
+                    SetCD();
+                    IsCD = true;
+                }
+            }
+
+            for (int i = Bonuses.Count - 1; i >= 0; i--)
+            {
+                Bonuses[i].Duration -= delta;
+
+                if (Bonuses[i].Duration <= 0)
+                {
+                    Bonuses[i].Remove(this);
+                    Bonuses.RemoveAt(i);
+                }
+            }
+        }
+    }
+    public class PlayerBonus
+    {
+        public double Duration;
+        public Action<CPlayer> Apply;
+        public Action<CPlayer> Remove;
+
+        public PlayerBonus(double duration, Action<CPlayer> apply, Action<CPlayer> remove)
+        {
+            Duration = duration;
+            Apply = apply;
+            Remove = remove;
         }
     }
 }

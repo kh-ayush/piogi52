@@ -44,7 +44,16 @@ namespace MainGame.Classes
             int x = rng.Next(0, sceneSize.Width - (int)size);
             int y = rng.Next(0, sceneSize.Height - (int)size);
 
-            CObject obj = new CObject(new Point(x, y), size, lifetime);
+            int rnd = rng.Next(0, 3);
+            CObject obj;
+
+            switch (rnd)
+            {
+                case 0: obj = new CRedObject(new Point(x, y), size, lifetime); break;
+                case 1: obj = new CGoldObject(new Point(x, y), size, lifetime); break;
+                default: obj = new CGreenObject(new Point(x, y), size, lifetime); break;
+            }
+
             objects.Add(obj);
         }
 

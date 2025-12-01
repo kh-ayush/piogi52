@@ -56,6 +56,10 @@
 
             <Button x:Name="UpgradeDamage" Content="Upgrade DM" Width="120" Height="35" Margin="0,5,0,10" Click="UpgradeButton_Click"/>
             <Button x:Name="UpgradeCD" Content="Upgrade CD" Width="120" Height="35" Click="UpgradeCD_Click" />
+
+            <TextBlock Text="CoolDown:" FontSize="16" Margin="0,10,0,5"/>
+            <TextBlock Text="{Binding TimeLeft, StringFormat={}{0:F2}}" FontSize="16" FontWeight="Bold"/>
+
         </StackPanel>
     </Grid>
 </Window>

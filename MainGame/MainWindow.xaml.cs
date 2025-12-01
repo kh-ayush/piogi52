@@ -65,16 +65,13 @@ namespace MainGame
                 sceneSize: new System.Drawing.Size(250, 250)
             );
 
-            timer.Start();
-
-            GameCanvas.MouseLeftButtonDown += GameCanvas_MouseLeftButtonDown;
-
             enemyTemps = new CEnemyTemplateList();
             enemyTemps.LoadJson();
             normalizeChances();
             CurrentTemplate = findByChance(rand.NextDouble());
             CurrentEnemy = new CEnemy(CurrentTemplate);
             EnemyCount = 0;
+            
 
             NextButton.IsEnabled = false;
             RepeatButton.IsEnabled = false;
@@ -87,24 +84,40 @@ namespace MainGame
                 new CBigNum("2"),     //damage
                 1.2,                  //dmgMod
                 new CBigNum("10"),    //upgradeCost
-                1.2);                 //upgradeMod
+                1.2 );                 //upgradeMod
             
             PlayerInfo.DataContext = Player;
+
+            timer.Start();
         }
         private void Attack(object sender, MouseButtonEventArgs e)
         {
-            CBigNum reward;
-            if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward))
+            if (Player.IsCD)
             {
-                timer.Stop();
+                var pos = e.GetPosition(GameCanvas);
+                System.Drawing.Point pt = new System.Drawing.Point((int)pos.X, (int)pos.Y);
 
-                Player.AddGold(reward);
-                EnemyCount++;
-                NextButton.IsEnabled = true;
-                RepeatButton.IsEnabled = true;
+                CObject hit = controller.mouseClick(pt);
+                if (hit != null) 
+                {
+                    hit.ApplyBonus(Player);
+                    GameCanvas.Children.Remove(hit.Sprite); 
+                }
+                Player.IsCD = false;
 
-                controller.Objects.Clear();
-                GameCanvas.Children.Clear();
+                CBigNum reward;
+                if (CurrentEnemy.TakeDamage(Player.DealDamage(), out reward))
+                {
+                    timer.Stop();
+
+                    Player.AddGold(reward);
+                    EnemyCount++;
+                    NextButton.IsEnabled = true;
+                    RepeatButton.IsEnabled = true;
+
+                    controller.Objects.Clear();
+                    GameCanvas.Children.Clear();
+                }
             }
         }
         private void UpgradeButton_Click(object sender, RoutedEventArgs e)
@@ -143,37 +156,16 @@ namespace MainGame
             }
         }
 
-        private void GameCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var pos = e.GetPosition(GameCanvas);
-            System.Drawing.Point pt = new System.Drawing.Point((int)pos.X, (int)pos.Y);
-
-            CObject hit = controller.mouseClick(pt);
-
-            if (hit != null)
-            {
-                GameCanvas.Children.Remove(hit.Sprite);
-            }
-        }
-
         private void UpdateGame(object sender, EventArgs e)
         {
             double delta = 0.016;
-            //gameTimeLeft -= delta;
 
-            //if (gameTimeLeft <= 0)
-            //{
-            //    timer.Stop();
-            //    GameCanvas.Children.Clear();
-            //    return;
-            //}
-
+            Player.Update(delta);
             controller.update(delta);
 
             GameCanvas.Children.Clear();
 
-            foreach (var obj in controller.Objects)
-                GameCanvas.Children.Add(obj.Sprite);
+            foreach (var obj in controller.Objects) GameCanvas.Children.Add(obj.Sprite);
         }
 
         
