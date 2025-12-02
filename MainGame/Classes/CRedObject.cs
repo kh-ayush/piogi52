@@ -18,7 +18,23 @@ namespace MainGame.Classes
         }
         protected override void GetBonus(CPlayer player)
         {
+            if (player == null) return;
 
+            const double BONUS_DURATION = 8.0;
+            const double DAMAGE_MULTIPLIER = 1.5;
+
+            // Сохраняем текущий урон
+            CBigNum originalDamage = player.Damage;
+
+            player.AddBonus(
+                new PlayerBonus(
+                    duration: BONUS_DURATION,
+                    apply: p => p.Damage = originalDamage * DAMAGE_MULTIPLIER,
+                    remove: p => p.Damage = originalDamage
+                )
+            );
         }
+
     }
+    
 }
