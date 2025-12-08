@@ -9,8 +9,6 @@ namespace MainGame.Classes
 {
     public class CGoldObject : CObject
     {
-        private const int GOLD_AMOUNT = 50;
-
         public CGoldObject(System.Drawing.Point position, double size, double lifetime)
             : base(position, size, lifetime)
         { }
