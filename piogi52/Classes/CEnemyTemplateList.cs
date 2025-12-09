@@ -25,6 +25,7 @@ namespace piogi52.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        private readonly ISaveList<List<CEnemyTemplate>> _serializer = new JsonEnemySaver();
         public ObservableCollection<CEnemyTemplate> enemies { get; set; }
         public CEnemyTemplateList()
         {

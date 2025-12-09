@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace piogi52.Classes
 {
-    public class CEnemyTemplate : INotifyPropertyChanged
+    public abstract class CEnemyTemplate : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
