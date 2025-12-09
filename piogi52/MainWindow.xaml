@@ -19,7 +19,7 @@
                      Name="EnemyListBox" Height="300"/>
             <UniformGrid Columns="2">
                 <Button Height="30" Content="Save" Background="Coral" Click="ButtonSave_Click"/>
-                <Button  Content="Load" Background="Bisque" Click="ButtonLoad_Click"/>
+                <Button Content="Load" Background="Bisque" Click="ButtonLoad_Click"/>
             </UniformGrid>
         </StackPanel>
 
@@ -42,6 +42,22 @@
                     <Label Content="Enemy Name:" Height="30"/>
                     <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.Name, Mode=TwoWay}"
                              Height="30"/>
+
+                    <Label Content="Enemy Type:" Height="30" Margin="0,5,0,0"/>
+                    <StackPanel Orientation="Vertical">
+                        <RadioButton GroupName="EnemyType" 
+                                    Content="Normal" 
+                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Normal}"/>
+                        <RadioButton GroupName="EnemyType" 
+                                    Content="Armored" 
+                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Elite}"/>
+                        <RadioButton GroupName="EnemyType" 
+                                    Content="Healer" 
+                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Boss}"/>
+                        <RadioButton GroupName="EnemyType" 
+                                    Content="Shortened" 
+                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Miniboss}"/>
+                    </StackPanel>
                 </StackPanel>
             </UniformGrid>
 
