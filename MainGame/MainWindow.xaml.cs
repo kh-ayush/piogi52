@@ -132,9 +132,9 @@ namespace MainGame
         {
             if (CurrentEnemy.IsDead)
             {
-                CurrentEnemy = new CEnemy(CurrentTemplate);
                 CurrentEnemy.RecalculateStats(CurrentTemplate, EnemyCount);
                 EnemyInfo.DataContext = CurrentEnemy;
+                CurrentEnemy = new CEnemy(CurrentTemplate);
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
 

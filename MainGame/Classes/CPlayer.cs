@@ -103,7 +103,7 @@ namespace MainGame.Classes
             UpgradeModifier = upgradeModifier;
             DamageCost = upgradeCost;
             CooldownCost = upgradeCost;
-            CoolDown = 5;
+            CoolDown = 3;
             TimeLeft = CoolDown;
             IsCD = true;
         }
