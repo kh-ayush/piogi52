@@ -74,6 +74,7 @@ namespace piogi52.Classes
         public string IconName
         {
             get => iconName;
+            set => iconName = value;
         }
         [JsonInclude]
         public int BaseLife

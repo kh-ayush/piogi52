@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:piogi52"
         xmlns:conv="clr-namespace:piogi52.Classes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
+        Title="MainWindow" Height="520" Width="800">
     
     <!--<Window.Resources>
         <conv:EnemyTypeConverter x:Key="BasicConv"
@@ -24,14 +24,29 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,369,0" Grid.RowSpan="2">
+        <StackPanel Grid.Column="0">
             <Label Content="List of enemies:"/>
-            <ListBox ItemsSource="{Binding enemies}" DisplayMemberPath="Name" 
-                     Name="EnemyListBox" Height="300"/>
+            <ListBox ItemsSource="{Binding enemies}" DisplayMemberPath="Name"
+                     Name="EnemyListBox" Height="300" VerticalAlignment="Stretch"/>
             <UniformGrid Columns="2">
-                <Button Height="30" Content="Save" Background="Coral" Click="ButtonSave_Click"/>
-                <Button Content="Load" Background="Bisque" Click="ButtonLoad_Click"/>
+                <Button Name="Add" Height="30" Width="90" Content="New Enemy" Background="Coral" Click="Add_Click"/>
+                <Button Name="Remove" Height="30" Width="90" Content="Remove" Background="Bisque" Click="Remove_Click" />
             </UniformGrid>
+            <Label Content="New Enemy Type:" Height="30" Margin="10,5,0,0"/>
+            <StackPanel Orientation="Vertical">
+                <RadioButton GroupName="EnemyType" Margin="10,5,0,0"
+                Name="NormalType" Content="Normal" Checked="EnemyType_Checked"/>
+                <!--IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Normal}"/>-->
+                <RadioButton GroupName="EnemyType" Margin="10,5,0,0"
+                Name="ArmoredType" Content="Armored" 
+                Checked="EnemyType_Checked"/>
+                <RadioButton GroupName="EnemyType" Margin="10,5,0,0"
+                Name="HealerType" Content="Healer" 
+                Checked="EnemyType_Checked"/>
+                <RadioButton GroupName="EnemyType" Margin="10,5,0,0"
+                Name="ShortType" Content="Shortened" 
+                Checked="EnemyType_Checked"/>
+            </StackPanel>
         </StackPanel>
 
         <Grid Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,246,0" Grid.RowSpan="2">
@@ -53,22 +68,6 @@
                     <Label Content="Enemy Name:" Height="30"/>
                     <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.Name, Mode=TwoWay}"
                              Height="30"/>
-
-                    <Label Content="Enemy Type:" Height="30" Margin="0,5,0,0"/>
-                    <StackPanel Orientation="Vertical">
-                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
-                                    Content="Normal" Checked="EnemyType_Checked"/>
-                        <!--IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Normal}"/>-->
-                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
-                                    Content="Armored" 
-                                    Checked="EnemyType_Checked"/>
-                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
-                                    Content="Healer" 
-                                    Checked="EnemyType_Checked"/>
-                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
-                                    Content="Shortened" 
-                                    Checked="EnemyType_Checked"/>
-                    </StackPanel>
                 </StackPanel>
             </UniformGrid>
 
@@ -98,10 +97,10 @@
                     <TextBox Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.SpawnChance, Mode=TwoWay}"
                              Height="30"/>
                 </StackPanel>
-                <StackPanel Margin="0,17,0,0" Orientation="Horizontal">
-                    <Button Name="Add" Height="30" Width="90" Content="Add" Background="Coral" Click="Add_Click"/>
-                    <Button Name="Remove" Height="30" Width="90" Content="Remove" Background="Bisque" Click="Remove_Click" />
-                </StackPanel>
+                <UniformGrid Margin="0,17,0,0">
+                    <Button Content="Save" Background="Coral" Click="ButtonSave_Click"/>
+                    <Button Content="Load" Background="Bisque" Click="ButtonLoad_Click"/>
+                </UniformGrid>
             </UniformGrid>
         </Grid>
 

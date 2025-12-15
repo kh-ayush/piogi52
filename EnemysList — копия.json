@@ -1,0 +1,13 @@
+[
+  {
+    "$type": "CBasicEnemyTemplate",
+    "Name": "888",
+    "IconPath": "",
+    "IconName": "",
+    "BaseLife": 0,
+    "LifeModifier": 1,
+    "BaseGold": 0,
+    "GoldModifier": 1,
+    "SpawnChance": 0.5
+  }
+]

@@ -111,8 +111,8 @@ namespace piogi52.Classes
             if (File.Exists(path))
             {
                 string json = File.ReadAllText(path);
-                //Десериализация с определение класса противника
-                return JsonSerializer.Deserialize<ObservableCollection<CEnemyTemplate>>(json, _options) ?? new ObservableCollection<CEnemyTemplate>();
+                //Десериализация с определением класса противника
+                return JsonSerializer.Deserialize<ObservableCollection<CEnemyTemplate>>(json, _options);// ?? new ObservableCollection<CEnemyTemplate>();
             }
             return new ObservableCollection<CEnemyTemplate>();
         }

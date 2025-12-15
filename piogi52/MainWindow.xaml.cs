@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.Win32;
+using piogi52.Classes;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -12,8 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
-using piogi52.Classes;
+using System.Xml.Linq;
 
 namespace piogi52
 {
@@ -84,13 +86,11 @@ namespace piogi52
         }
         private void ButtonLoad_Click(object sender, RoutedEventArgs e)
         {
-            EnemyList.Clear();
             EnemyList.LoadJson();
         }
         private void EnemyType_Checked(object sender, RoutedEventArgs e)
         {
-            if (EnemyListBox.SelectedItem == null)
-                return;
+            if (EnemyListBox.SelectedItem == null) return;
 
             string type = (sender as RadioButton).Content.ToString();
             int index = EnemyListBox.SelectedIndex;
@@ -106,12 +106,15 @@ namespace piogi52
             var old = EnemyListBox.SelectedItem as CEnemyTemplate;
             newEnemy.Name = old.Name;
             newEnemy.IconPath = old.IconPath;
+            newEnemy.IconName = old.IconName;
             newEnemy.BaseLife = old.BaseLife;
+            newEnemy.LifeModifier = old.LifeModifier;
             newEnemy.BaseGold = old.BaseGold;
+            newEnemy.GoldModifier = old.GoldModifier;
+            newEnemy.SpawnChance = old.SpawnChance;
 
             EnemyList.enemies[index] = newEnemy;
             EnemyListBox.SelectedItem = newEnemy;
         }
-
     }
 }

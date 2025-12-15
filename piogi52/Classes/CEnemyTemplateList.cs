@@ -76,8 +76,14 @@ namespace piogi52.Classes
             OpenFileDialog okno = new OpenFileDialog();
             if ((bool)okno.ShowDialog())
             {
-                string jsonFromFile = File.ReadAllText(okno.FileName);
-                enemies = _serializer.Load(okno.FileName);
+                //string jsonFromFile = File.ReadAllText(okno.FileName);
+
+                var loadedEnemies = _serializer.Load(okno.FileName);
+                enemies.Clear();
+                foreach (var enemy in loadedEnemies)
+                {
+                    enemies.Add(enemy);
+                }
 
                 //JsonDocument doc = JsonDocument.Parse(jsonFromFile);
                 //foreach (JsonElement element in doc.RootElement.EnumerateArray())
