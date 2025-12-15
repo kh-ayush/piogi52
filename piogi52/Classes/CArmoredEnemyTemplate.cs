@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using piogi52.Interfaces;
 
 namespace piogi52.Classes
 {
-    public class CArmoredEnemyTemplate : CEnemyTemplate
+    public class CArmoredEnemyTemplate : CEnemyTemplate, IArmor
     {
         double armor;
         public double Armor

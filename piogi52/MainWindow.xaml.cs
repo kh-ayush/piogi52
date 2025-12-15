@@ -56,7 +56,7 @@ namespace piogi52
             //SelectedE = new CEnemyTemplate();
             //EnemyList.AddEnemy(SelectedE);
 
-            EnemyList.AddEnemy(new CEnemyTemplate());
+            EnemyList.AddEnemy(new CBasicEnemyTemplate());
             DataContext = EnemyList;
         }
         private void IconListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -72,7 +72,7 @@ namespace piogi52
         }
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            EnemyList.AddEnemy(new CEnemyTemplate());
+            EnemyList.AddEnemy(new CBasicEnemyTemplate());
         }
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
@@ -87,5 +87,31 @@ namespace piogi52
             EnemyList.Clear();
             EnemyList.LoadJson();
         }
+        private void EnemyType_Checked(object sender, RoutedEventArgs e)
+        {
+            if (EnemyListBox.SelectedItem == null)
+                return;
+
+            string type = (sender as RadioButton).Content.ToString();
+            int index = EnemyListBox.SelectedIndex;
+
+            CEnemyTemplate newEnemy = type switch
+            {
+                "Normal" => new CBasicEnemyTemplate(),
+                "Armored" => new CArmoredEnemyTemplate(),
+                "Healer" => new CMedEnemyTemplate(),
+                "Shortened" => new CBoberEnemyTemplate()
+            };
+
+            var old = EnemyListBox.SelectedItem as CEnemyTemplate;
+            newEnemy.Name = old.Name;
+            newEnemy.IconPath = old.IconPath;
+            newEnemy.BaseLife = old.BaseLife;
+            newEnemy.BaseGold = old.BaseGold;
+
+            EnemyList.enemies[index] = newEnemy;
+            EnemyListBox.SelectedItem = newEnemy;
+        }
+
     }
 }

@@ -4,8 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:piogi52"
+        xmlns:conv="clr-namespace:piogi52.Classes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="800">
+    
+    <!--<Window.Resources>
+        <conv:EnemyTypeConverter x:Key="BasicConv"
+                             EnemyType="{x:Type local:CBasicEnemyTemplate}" />
+        <conv:EnemyTypeConverter x:Key="ArmoredConv"
+                             EnemyType="{x:Type local:CArmoredEnemyTemplate}" />
+        <conv:EnemyTypeConverter x:Key="HealerConv"
+                             EnemyType="{x:Type local:CHealerEnemyTemplate}" />
+    </Window.Resources>-->
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.5*"/>
@@ -45,18 +56,18 @@
 
                     <Label Content="Enemy Type:" Height="30" Margin="0,5,0,0"/>
                     <StackPanel Orientation="Vertical">
-                        <RadioButton GroupName="EnemyType" 
-                                    Content="Normal" 
-                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Normal}"/>
-                        <RadioButton GroupName="EnemyType" 
+                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
+                                    Content="Normal" Checked="EnemyType_Checked"/>
+                        <!--IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Normal}"/>-->
+                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
                                     Content="Armored" 
-                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Elite}"/>
-                        <RadioButton GroupName="EnemyType" 
+                                    Checked="EnemyType_Checked"/>
+                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
                                     Content="Healer" 
-                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Boss}"/>
-                        <RadioButton GroupName="EnemyType" 
+                                    Checked="EnemyType_Checked"/>
+                        <RadioButton GroupName="EnemyType" Margin="0,5,0,0"
                                     Content="Shortened" 
-                                    IsChecked="{Binding ElementName=EnemyListBox, Path=SelectedItem.Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Miniboss}"/>
+                                    Checked="EnemyType_Checked"/>
                     </StackPanel>
                 </StackPanel>
             </UniformGrid>

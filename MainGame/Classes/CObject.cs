@@ -45,7 +45,6 @@ namespace MainGame.Classes
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(position, size);
             return rect.Contains(mousePos);
         }
-
         public bool updateLifetime(double delta)
         {
             lifetime -= delta;

@@ -25,15 +25,11 @@ namespace piogi52.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private readonly ISaveList<List<CEnemyTemplate>> _serializer = new JsonEnemySaver();
+        private readonly ISaveList<ObservableCollection<CEnemyTemplate>> _serializer = new JsonEnemySaver();
         public ObservableCollection<CEnemyTemplate> enemies { get; set; }
         public CEnemyTemplateList()
         {
             enemies = new ObservableCollection<CEnemyTemplate>();
-        }
-        public void addEnemy(string name, string iconPath, int baseLife, double lifeModification, int baseGold, double goldModification, double spawnChance)
-        {
-            enemies.Add(new CEnemyTemplate(name, iconPath, baseLife, lifeModification, baseGold, goldModification, spawnChance));
         }
         public void AddEnemy(CEnemyTemplate x)
         {
@@ -69,12 +65,10 @@ namespace piogi52.Classes
         }
         public void SaveJson()
         {
-            string jsonString = JsonSerializer.Serialize(enemies);
-            
             OpenFileDialog okno = new OpenFileDialog();
             if ((bool)okno.ShowDialog())
             {
-                File.WriteAllText(okno.FileName, jsonString);
+                _serializer.Save(enemies, okno.FileName);
             }
         }
         public void LoadJson()
@@ -83,19 +77,20 @@ namespace piogi52.Classes
             if ((bool)okno.ShowDialog())
             {
                 string jsonFromFile = File.ReadAllText(okno.FileName);
-                JsonDocument doc = JsonDocument.Parse(jsonFromFile);
+                enemies = _serializer.Load(okno.FileName);
 
-                foreach (JsonElement element in doc.RootElement.EnumerateArray())
-                {
-                    string name = element.GetProperty("Name").GetString();
-                    string iconPath = element.GetProperty("IconPath").GetString();
-                    int baseLife = element.GetProperty("BaseLife").GetInt32();
-                    double lifeModification = element.GetProperty("LifeModifier").GetDouble();
-                    int baseGold = element.GetProperty("BaseGold").GetInt32();
-                    double goldModification = element.GetProperty("GoldModifier").GetDouble();
-                    double spawnChance = element.GetProperty("SpawnChance").GetDouble();
-                    enemies.Add(new CEnemyTemplate(name, iconPath, baseLife, lifeModification, baseGold, goldModification, spawnChance));
-                }
+                //JsonDocument doc = JsonDocument.Parse(jsonFromFile);
+                //foreach (JsonElement element in doc.RootElement.EnumerateArray())
+                //{
+                //    string name = element.GetProperty("Name").GetString();
+                //    string iconPath = element.GetProperty("IconPath").GetString();
+                //    int baseLife = element.GetProperty("BaseLife").GetInt32();
+                //    double lifeModification = element.GetProperty("LifeModifier").GetDouble();
+                //    int baseGold = element.GetProperty("BaseGold").GetInt32();
+                //    double goldModification = element.GetProperty("GoldModifier").GetDouble();
+                //    double spawnChance = element.GetProperty("SpawnChance").GetDouble();
+                //    enemies.Add(new CEnemyTemplate(name, iconPath, baseLife, lifeModification, baseGold, goldModification, spawnChance));
+                //}
             }
         }
     }
