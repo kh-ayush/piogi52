@@ -44,9 +44,8 @@ namespace MainGame
         public CEnemyTemplateList enemyTemps;
         public CEnemyTemplate CurrentTemplate;
         public Random rand = new Random();
-        public CEnemy CurrentEnemy;
+        public IEnemy CurrentEnemy;
         public CPlayer Player;
-        public int EnemyCount = 0;
 
         private DispatcherTimer timer;
         private CController controller;
@@ -69,8 +68,7 @@ namespace MainGame
             enemyTemps.LoadJson();
             normalizeChances();
             CurrentTemplate = findByChance(rand.NextDouble());
-            CurrentEnemy = new CEnemy(CurrentTemplate);
-            EnemyCount = 0;
+            CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
             
 
             NextButton.IsEnabled = false;
@@ -111,7 +109,7 @@ namespace MainGame
                     timer.Stop();
 
                     Player.AddGold(reward);
-                    EnemyCount++;
+                    Player.EnemyCount++;
                     NextButton.IsEnabled = true;
                     RepeatButton.IsEnabled = true;
 
@@ -132,9 +130,9 @@ namespace MainGame
         {
             if (CurrentEnemy.IsDead)
             {
-                CurrentEnemy.RecalculateStats(CurrentTemplate, EnemyCount);
+                CurrentEnemy.RecalculateStats(CurrentTemplate, Player.EnemyCount);
                 EnemyInfo.DataContext = CurrentEnemy;
-                CurrentEnemy = new CEnemy(CurrentTemplate);
+                CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
 
@@ -146,8 +144,8 @@ namespace MainGame
             if (CurrentEnemy.IsDead)
             {
                 CurrentTemplate = findByChance(rand.NextDouble());
-                CurrentEnemy = new CEnemy(CurrentTemplate);
-                CurrentEnemy.RecalculateStats(CurrentTemplate, EnemyCount);
+                CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
+                CurrentEnemy.RecalculateStats(CurrentTemplate, Player.EnemyCount);
                 EnemyInfo.DataContext = CurrentEnemy;
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
@@ -168,6 +166,18 @@ namespace MainGame
             foreach (var obj in controller.Objects) GameCanvas.Children.Add(obj.Sprite);
         }
 
-        
+        private void LoadGame(object sender, RoutedEventArgs e)
+        {
+            Player.LoadPlayer();
+            CurrentTemplate = findByChance(rand.NextDouble());
+            CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
+            CurrentEnemy.RecalculateStats(CurrentTemplate, Player.EnemyCount);
+            EnemyInfo.DataContext = CurrentEnemy;
+        }
+
+        private void SaveGame(object sender, RoutedEventArgs e)
+        {
+            Player.SavePlayer();
+        }
     }
 }

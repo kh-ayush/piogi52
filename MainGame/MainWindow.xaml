@@ -6,60 +6,70 @@
         xmlns:local="clr-namespace:MainGame"
         mc:Ignorable="d"
         Title="Clicker" Height="600" Width="800">
-    
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="1.3*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="🔴 – More Damage" FontSize="16" Foreground="Red"/>
-            <TextBlock Text="🔴 – Less Cooldown" FontSize="16" Foreground="Green" Margin="0,15"/>
-            <TextBlock Text="🔴 – More Gold" FontSize="16" Foreground="Orange"/>
-            
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,100,0,0">
-                <Button x:Name="RepeatButton" Content="Repeat" Width="100" Margin="10,0" Click="RepeatButton_Click"/>
-                <Button x:Name="NextButton" Content="Next" Width="100" Margin="10,0" Click="NextButton_Click"/>
-            </StackPanel>
-        </StackPanel>
+    <Grid>
+        <Menu Background="LightGray" VerticalAlignment="Top">
+            <MenuItem Header="Player">
+                <MenuItem Header="Load (Game will be restarted)" Click="LoadGame"/>
+                <MenuItem Header="Save" Click="SaveGame"/>
+            </MenuItem>
+        </Menu>
         
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Name="EnemyInfo">
-            <TextBlock Text="Enemy name:" FontSize="16"/>
-            <TextBlock FontSize="16" Margin="0,5,0,10" Text="{Binding Name}"/>
+        <Grid Margin="0,30,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Enemy hit point:" FontSize="16"/>
-            <TextBlock FontSize="16" Margin="0,5,0,10" Text="{Binding CurrentHitPoints}"/>
+        
 
-            <TextBlock Text="Gold from enemy:" FontSize="16"/>
-            <TextBlock FontSize="16" Margin="0,5,0,20" Text="{Binding GoldReward}"/>
+            <StackPanel Margin="10" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="🔴 – More Damage" FontSize="16" Foreground="Red"/>
+                <TextBlock Text="🔴 – Less Cooldown" FontSize="16" Foreground="Green" Margin="0,15"/>
+                <TextBlock Text="🔴 – More Gold" FontSize="16" Foreground="Orange"/>
+            
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,100,0,0">
+                    <Button x:Name="RepeatButton" Content="Repeat" Width="100" Margin="10,0" Click="RepeatButton_Click"/>
+                    <Button x:Name="NextButton" Content="Next" Width="100" Margin="10,0" Click="NextButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Name="EnemyInfo">
+                <TextBlock Text="Enemy name:" FontSize="16"/>
+                <TextBlock FontSize="16" Margin="0,5,0,10" Text="{Binding Name}"/>
 
-            <Grid Margin="0,5,0,10" >
-                <Image Source="{Binding Icon}" Width="250" Height="250"/>
-                <Canvas Width="250" Height="250" Background="Transparent" 
-                        Name="GameCanvas" MouseLeftButtonDown="Attack"/>
-            </Grid>
-        </StackPanel>
-        <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Name="PlayerInfo">
-            <TextBlock Text="Level:" FontSize="16"/>
-            <TextBlock Text="{Binding Lvl}" FontSize="16" Margin="0,5,0,10"/>
+                <TextBlock Text="Enemy hit point:" FontSize="16"/>
+                <TextBlock FontSize="16" Margin="0,5,0,10" Text="{Binding CurrentHitPoints}"/>
 
-            <TextBlock Text="Player's gold:" FontSize="16"/>
-            <TextBlock Text="{Binding Gold}" FontSize="16" Margin="0,5,0,10"/>
+                <TextBlock Text="Gold from enemy:" FontSize="16"/>
+                <TextBlock FontSize="16" Margin="0,5,0,20" Text="{Binding GoldReward}"/>
 
-            <TextBlock Text="Player's damage:" FontSize="16"/>
-            <TextBlock Text="{Binding Damage}" FontSize="16"  Margin="0,5,0,20"/>
+                <Grid Margin="0,5,0,10" >
+                    <Image Source="{Binding Icon}" Width="250" Height="250"/>
+                    <Canvas Width="250" Height="250" Background="Transparent" 
+                            Name="GameCanvas" MouseLeftButtonDown="Attack"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Name="PlayerInfo">
+                <TextBlock Text="Level:" FontSize="16"/>
+                <TextBlock Text="{Binding Lvl}" FontSize="16" Margin="0,5,0,10"/>
 
-            <Button x:Name="UpgradeDamage" Content="Upgrade DM" Width="120" Height="35" Margin="0,5,0,10" Click="UpgradeButton_Click"/>
-            <Button x:Name="UpgradeCD" Content="Upgrade CD" Width="120" Height="35" Click="UpgradeCD_Click" />
+                <TextBlock Text="Player's gold:" FontSize="16"/>
+                <TextBlock Text="{Binding Gold}" FontSize="16" Margin="0,5,0,10"/>
 
-            <TextBlock Text="CoolDown:" FontSize="16" Margin="0,10,0,5"/>
-            <TextBlock Text="{Binding TimeLeft, StringFormat={}{0:F2}}" FontSize="16" FontWeight="Bold"/>
+                <TextBlock Text="Player's damage:" FontSize="16"/>
+                <TextBlock Text="{Binding Damage}" FontSize="16"  Margin="0,5,0,20"/>
 
-        </StackPanel>
+                <Button x:Name="UpgradeDamage" Content="Upgrade DM" Width="120" Height="35" Margin="0,5,0,10" Click="UpgradeButton_Click"/>
+                <Button x:Name="UpgradeCD" Content="Upgrade CD" Width="120" Height="35" Click="UpgradeCD_Click" />
+
+                <TextBlock Text="CoolDown:" FontSize="16" Margin="0,10,0,5"/>
+                <TextBlock Text="{Binding TimeLeft, StringFormat={}{0:F2}}" FontSize="16" FontWeight="Bold"/>
+
+            </StackPanel>
+            <ProgressBar Grid.Column="2" HorizontalAlignment="Left" Height="10" Margin="304,503,0,0" VerticalAlignment="Top" Width="100"/>
+        </Grid>
     </Grid>
 </Window>

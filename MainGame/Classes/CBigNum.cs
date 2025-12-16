@@ -32,7 +32,7 @@ namespace MainGame.Classes
             number = TrimLeadingZeros(number);
         }
 
-        private CBigNum(int[] digs)
+        public CBigNum(int[] digs)
         {
             number = TrimLeadingZeros(digs);
         }

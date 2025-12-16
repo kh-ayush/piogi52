@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ using static piogi52.MainWindow;
 
 namespace MainGame.Classes
 {
-    public class CEnemy : INotifyPropertyChanged
+    public abstract class CEnemy : INotifyPropertyChanged, IEnemy
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -24,27 +26,31 @@ namespace MainGame.Classes
         private CBigNum goldReward;
         private bool isDead;
         private string icon;
-        public string Name { 
+        public string Name
+        {
             get => name;
-            private set 
+            private set
             {
                 name = value;
                 OnPropertyChanged();
             }
         }
-        public CBigNum MaxHitPoints { 
+        public CBigNum MaxHitPoints
+        {
             get => maxHitPoints;
             private set => maxHitPoints = value;
-        }   
-        public CBigNum CurrentHitPoints { 
+        }
+        public CBigNum CurrentHitPoints
+        {
             get => currentHitPoints;
-            private set
+            set
             {
                 currentHitPoints = value;
                 OnPropertyChanged();
             }
         }
-        public CBigNum GoldReward {
+        public CBigNum GoldReward
+        {
             get => goldReward;
             private set
             {
@@ -52,11 +58,13 @@ namespace MainGame.Classes
                 OnPropertyChanged();
             }
         }
-        public bool IsDead {
+        public bool IsDead
+        {
             get => isDead;
-            private set => isDead = value; 
+            private set => isDead = value;
         }
-        public string Icon {
+        public string Icon
+        {
             get => icon;
             private set
             {
@@ -64,11 +72,12 @@ namespace MainGame.Classes
                 OnPropertyChanged();
             }
         }
+        protected CEnemy() { }
         public CEnemy(string name, CBigNum maxHitPoints, CBigNum goldReward, string icon)
         {
             Name = name;
             MaxHitPoints = maxHitPoints;
-            CurrentHitPoints = maxHitPoints; 
+            CurrentHitPoints = maxHitPoints;
             GoldReward = goldReward;
             IsDead = false;
             Icon = icon;
@@ -82,7 +91,7 @@ namespace MainGame.Classes
             IsDead = false;
             Icon = enemyTemplate.IconPath;
         }
-        public bool TakeDamage(CBigNum dmg, out CBigNum goldReward)
+        public virtual bool TakeDamage(CBigNum dmg, out CBigNum goldReward)
         {
             goldReward = new CBigNum("0");
 
@@ -95,9 +104,8 @@ namespace MainGame.Classes
             {
                 IsDead = true;
                 goldReward = GoldReward;
-                return true;
             }
-            return false;
+            return IsDead;
         }
         public void RecalculateStats(CEnemyTemplate enemyTemplate, int lvl)
         {
@@ -105,5 +113,31 @@ namespace MainGame.Classes
             CurrentHitPoints = MaxHitPoints;
             GoldReward = GoldReward * (enemyTemplate.GoldModifier * lvl);
         }
+    }
+
+    public class EnemyFactory
+    {
+        public static IEnemy CreateEnemy(CEnemyTemplate template)
+        {
+            if (template == null)
+                return null;
+
+            return template switch
+            {
+                CBasicEnemyTemplate basic => new CBasicEnemy(basic),
+                CArmoredEnemyTemplate armored => new CArmoredEnemy(armored),
+                CMedEnemyTemplate medic => new CMedEnemy(medic),
+                CBoberEnemyTemplate bober => new CBoberEnemy(bober),
+            };
+        }
+
+        //public static IEnemy CreateEnemy(string typeName, params object[] args)
+        //{
+        //    // Находим тип по названию
+        //    var type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == typeName);
+
+        //    // Создаем объект с передачей параметров в конструктор
+        //    return (IEnemy)Activator.CreateInstance(type, args);
+        //}
     }
 }

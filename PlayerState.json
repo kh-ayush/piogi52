@@ -1,0 +1,22 @@
+{
+  "CoolDown": 0.75,
+  "CooldownCost": {
+    "Digits": [ 12 ]
+  },
+  "Damage": {
+    "Digits": [ 14 ]
+  },
+  "DamageCost": {
+    "Digits": [ 14 ]
+  },
+  "DamageModifier": 1.2,
+  "EnemyCount": 3,
+  "Gold": {
+    "Digits": [ 40 ]
+  },
+  "IsCD": false,
+  "Lvl": 3,
+  "MaxCoolDown": 0.75,
+  "TimeLeft": 0.75,
+  "UpgradeModifier": 1.2
+}

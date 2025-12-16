@@ -12,7 +12,7 @@
   },
   {
     "$type": "CArmoredEnemyTemplate",
-    "Armor": 25,
+    "Armor": 30,
     "Name": "\u0428\u043B\u0435\u043C",
     "IconPath": "C:\\Users\\tummy\\source\\repos\\piogi52\\icons\\Monsters\\skeleton_2.png",
     "IconName": "skeleton_2.png",
@@ -24,7 +24,7 @@
   },
   {
     "$type": "CBoberEnemyTemplate",
-    "Bober": 0.5,
+    "Bober": 40,
     "Name": "\u0431\u043E\u043E\u0431\u0435\u0435\u0440",
     "IconPath": "C:\\Users\\tummy\\source\\repos\\piogi52\\icons\\Monsters\\goblin_7.png",
     "IconName": "goblin_7.png",
@@ -36,7 +36,7 @@
   },
   {
     "$type": "CMedEnemyTemplate",
-    "Heal": 0.5,
+    "Heal": 10,
     "Name": "\u0431\u0438\u0433\u0431\u043E\u0439",
     "IconPath": "C:\\Users\\tummy\\source\\repos\\piogi52\\icons\\Monsters\\goblin_8.png",
     "IconName": "goblin_8.png",
