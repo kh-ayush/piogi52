@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace MainGame
 {
@@ -47,6 +48,7 @@ namespace MainGame
         public CEnemy CurrentEnemy;
         public CPlayer Player;
         public int EnemyCount = 0;
+        public int BonusPoint= 0;
 
         private DispatcherTimer timer;
         private CController controller;
@@ -64,6 +66,13 @@ namespace MainGame
                 startTime: 0,
                 sceneSize: new System.Drawing.Size(250, 250)
             );
+            //назначение обработчика события добавления объекта в сцену
+            controller.addObject += addObjectInScene;
+            //при удалении объекта срабатывает обработчик удаления
+            controller.removeObject += removeObjectFromScene;
+
+            controller.removeObject += logMessage;
+
 
             enemyTemps = new CEnemyTemplateList();
             enemyTemps.LoadJson();
@@ -71,7 +80,7 @@ namespace MainGame
             CurrentTemplate = findByChance(rand.NextDouble());
             CurrentEnemy = new CEnemy(CurrentTemplate);
             EnemyCount = 0;
-            
+
 
             NextButton.IsEnabled = false;
             RepeatButton.IsEnabled = false;
@@ -84,8 +93,8 @@ namespace MainGame
                 new CBigNum("2"),     //damage
                 1.2,                  //dmgMod
                 new CBigNum("10"),    //upgradeCost
-                1.2 );                 //upgradeMod
-            
+                1.2);                 //upgradeMod
+
             PlayerInfo.DataContext = Player;
 
             timer.Start();
@@ -98,10 +107,10 @@ namespace MainGame
                 System.Drawing.Point pt = new System.Drawing.Point((int)pos.X, (int)pos.Y);
 
                 CObject hit = controller.mouseClick(pt);
-                if (hit != null) 
+                if (hit != null)
                 {
-                    hit.ApplyBonus(Player);
-                    GameCanvas.Children.Remove(hit.Sprite); 
+                    BonusPoint++;
+                    GameCanvas.Children.Remove(hit.Sprite);
                 }
                 Player.IsCD = false;
 
@@ -155,7 +164,6 @@ namespace MainGame
                 timer.Start();
             }
         }
-
         private void UpdateGame(object sender, EventArgs e)
         {
             double delta = 0.016;
@@ -165,9 +173,22 @@ namespace MainGame
 
             GameCanvas.Children.Clear();
 
-            foreach (var obj in controller.Objects) GameCanvas.Children.Add(obj.Sprite);
+            foreach (var obj in controller.Objects) controller.spawnObject();
+        }
+        //обработчик события добавление собираемого объекта в сцену
+        public void addObjectInScene(object sender, CControllerEventArgs e)
+        { 
+            GameCanvas.Children.Add(e.sprite);
+        }
+        //обработчик события удаления собираемого объекта из сцены
+        public void removeObjectFromScene(object sender, CControllerEventArgs e)
+        {
+            GameCanvas.Children.Remove(e.sprite);
+        }
+        public void logMessage(object sender, CControllerEventArgs e)
+        {
+            StoryListBox.Items.Insert(0, e.msg);
         }
 
-        
     }
 }

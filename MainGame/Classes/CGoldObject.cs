@@ -24,7 +24,7 @@ namespace MainGame.Classes
         {
             if (player == null) return;
 
-            player.AddGold(new CBigNum(50));
+            player.AddGold(new CBigNum("50"));
 
         }
     }

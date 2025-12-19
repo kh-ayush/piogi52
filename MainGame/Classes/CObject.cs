@@ -6,13 +6,12 @@ using System.Windows.Shapes;
 
 namespace MainGame.Classes
 {
-    public abstract class CObject
+    public class CObject
     {
         private System.Drawing.Point position;
         private System.Drawing.Size size;
         private double lifetime;
         private Ellipse sprite;
-        private int bonustype = -1;
 
         public double Lifetime => lifetime;
         public Ellipse Sprite => sprite;
@@ -29,17 +28,12 @@ namespace MainGame.Classes
                 Height = this.size.Height,
                 Stroke = Brushes.White,
                 StrokeThickness = 2,
+                Fill = Brushes.Gray,
 
                 RenderTransform = new TranslateTransform(position.X, position.Y)
             };
-            sprite.Fill = GetFillBrush();
         }
-        protected abstract Brush GetFillBrush();
-        protected abstract void GetBonus(CPlayer player);
-        public void ApplyBonus(CPlayer player)
-        {
-            GetBonus(player);
-        }
+        public Ellipse GetSprite() { return Sprite; }
         public bool isMouseOnObject(System.Drawing.Point mousePos)
         {
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(position, size);
