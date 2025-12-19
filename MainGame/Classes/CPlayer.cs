@@ -28,12 +28,21 @@ namespace MainGame.Classes
         private CBigNum damagecost;
         private CBigNum cooldowncost;
         private double upgradeModifier;
+        private int bonusPoint = 0;
 
         public int Lvl {
             get => lvl;
             private set
             {
                 lvl = value;
+                OnPropertyChanged();
+            }
+        }
+        public int BonusPoint {
+            get => bonusPoint;
+            set
+            {
+                bonusPoint = value;
                 OnPropertyChanged();
             }
         }
@@ -96,6 +105,7 @@ namespace MainGame.Classes
 
         public CPlayer(int lvl, CBigNum gold, CBigNum damage, double damageModifier, CBigNum upgradeCost, double upgradeModifier)
         {
+            BonusPoint = 0;
             Lvl = lvl;
             Gold = gold;
             Damage = damage;

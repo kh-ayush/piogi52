@@ -63,6 +63,9 @@
 
             <TextBlock Text="CoolDown:" FontSize="16" Margin="0,10,0,5"/>
             <TextBlock Text="{Binding TimeLeft, StringFormat={}{0:F2}}" FontSize="16" FontWeight="Bold"/>
+            
+            <TextBlock Text="Points:" FontSize="16" Margin="0,10,0,5"/>
+            <TextBlock Text="{Binding BonusPoint}" FontSize="16"/>
 
         </StackPanel>
     </Grid>

@@ -48,7 +48,7 @@ namespace MainGame
         public CEnemy CurrentEnemy;
         public CPlayer Player;
         public int EnemyCount = 0;
-        public int BonusPoint= 0;
+        
 
         private DispatcherTimer timer;
         private CController controller;
@@ -72,7 +72,6 @@ namespace MainGame
             controller.removeObject += removeObjectFromScene;
 
             controller.removeObject += logMessage;
-
 
             enemyTemps = new CEnemyTemplateList();
             enemyTemps.LoadJson();
@@ -109,7 +108,7 @@ namespace MainGame
                 CObject hit = controller.mouseClick(pt);
                 if (hit != null)
                 {
-                    BonusPoint++;
+                    Player.BonusPoint += 1;
                     GameCanvas.Children.Remove(hit.Sprite);
                 }
                 Player.IsCD = false;
@@ -173,7 +172,7 @@ namespace MainGame
 
             GameCanvas.Children.Clear();
 
-            foreach (var obj in controller.Objects) controller.spawnObject();
+            foreach (var obj in controller.Objects) GameCanvas.Children.Add(obj.GetSprite());
         }
         //обработчик события добавление собираемого объекта в сцену
         public void addObjectInScene(object sender, CControllerEventArgs e)
