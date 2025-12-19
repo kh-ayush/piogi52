@@ -2,9 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Shapes;
 
 namespace MainGame.Classes
 {
+    public class CControllerEventArgs : EventArgs
+    {
+        //ссылка на визуальное представление собираемого объекта
+        public Ellipse sprite;
+        public string msg = "";
+        public CControllerEventArgs(Ellipse sprite)
+        {
+            this.sprite = sprite;
+        }
+    }
+    public delegate void SceneEvent(object sender, CControllerEventArgs e);
     public class CController
     {
         private List<CObject> objects;
@@ -24,6 +36,10 @@ namespace MainGame.Classes
         public List<CObject> Objects => objects;
         public double Points => points;
 
+        //ссылка на обработчик события добавления объекта в сцену
+        public event SceneEvent addObject;
+        //ссылка на обработчики событий удаления объекта из сцены
+        public event SceneEvent removeObject;
         public CController(double spawnRate, double startTime, Size sceneSize)
         {
             rng = new Random();
@@ -51,14 +67,18 @@ namespace MainGame.Classes
             {
                 case 0: obj = new CRedObject(new Point(x, y), size, lifetime); break;
                 case 1: obj = new CGoldObject(new Point(x, y), size, lifetime); break;
-                default: obj = new CGreenObject(new Point(x, y), size, lifetime); break;
+                default: obj = new ObjectTypes(new Point(x, y), size, lifetime); break;
             }
 
             objects.Add(obj);
+            addObject?.Invoke(this, new CControllerEventArgs(obj.GetSprite()));
         }
 
-        public void destroyObject(CObject obj)
+        public void destroyObject(CObject obj, string message)
         {
+            CControllerEventArgs e = new CControllerEventArgs(obj.GetSprite());
+            e.msg = message;
+            removeObject?.Invoke(this, e);
             objects.Remove(obj);
         }
 
@@ -75,7 +95,7 @@ namespace MainGame.Classes
             for (int i = objects.Count - 1; i >= 0; i--)
             {
                 if (!objects[i].updateLifetime(delta))
-                    destroyObject(objects[i]);
+                    destroyObject(objects[i], "you've hit the bonus!");
             }
         }
 
@@ -86,7 +106,7 @@ namespace MainGame.Classes
                 if (objects[i].isMouseOnObject(mousePos))
                 {
                     CObject CurObj = objects[i];
-                    destroyObject(CurObj);
+                    destroyObject(CurObj, "you've got the bonus!");
                     return CurObj;
                 }
             }

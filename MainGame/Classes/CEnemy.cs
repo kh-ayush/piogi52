@@ -8,16 +8,33 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 using static piogi52.MainWindow;
 
 namespace MainGame.Classes
 {
+    public class CEnemyEventArgs : EventArgs
+    {
+        public string msg;
+        public CBigNum reward;
+        public CBigNum damag;
+        public CEnemyEventArgs(CBigNum damage, string message = "")
+        {
+            this.damag = damage;
+            this.msg = message;
+        }
+    }
     public abstract class CEnemy : INotifyPropertyChanged, IEnemy
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public event EnemyEvent claimDamage;
+        protected virtual void OnClaimDamage(CEnemyEventArgs e)
+        {
+            claimDamage?.Invoke(this, e);
         }
 
         private string name;
@@ -99,10 +116,12 @@ namespace MainGame.Classes
             if (dmg > CurrentHitPoints) dmg = CurrentHitPoints;
 
             CurrentHitPoints -= dmg;
+            OnClaimDamage(new CEnemyEventArgs(dmg) { msg = $"Enemy takes {dmg} damage!" });
 
             if (CurrentHitPoints == new CBigNum("0"))
             {
                 IsDead = true;
+                OnClaimDamage(new CEnemyEventArgs(dmg) { msg = $"Enemy {Name} defeated!" });
                 goldReward = GoldReward;
             }
             return IsDead;

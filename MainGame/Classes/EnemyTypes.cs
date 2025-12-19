@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using static MainGame.Classes.CEnemy;
 
 namespace MainGame.Classes
 {
+    public delegate void EnemyEvent(object sender, CEnemyEventArgs e);
     public interface IEnemy
     {
+        event EnemyEvent claimDamage;
         string Name { get; }
         CBigNum MaxHitPoints { get; }
         CBigNum CurrentHitPoints { get; }
@@ -59,7 +62,7 @@ namespace MainGame.Classes
             if (random.NextDouble() < DodgeChance)
             {
                 goldReward = new CBigNum("0");
-                MessageBox.Show("Attack is Dodged!");
+                OnClaimDamage(new CEnemyEventArgs(dmg, "Attack dodged!"));
                 return false;
             }
 
@@ -82,15 +85,17 @@ namespace MainGame.Classes
             CBigNum healAmount = MaxHitPoints * (1 - Heal/100);
             CurrentHitPoints += healAmount;
             if (CurrentHitPoints > MaxHitPoints) CurrentHitPoints = MaxHitPoints;
-            MessageBox.Show("Enemy Healed!");
         }
 
         public override bool TakeDamage(CBigNum dmg, out CBigNum goldReward)
         {
             Random rr = new Random();
 
-            if (rr.Next(2) == 1 && CurrentHitPoints < MaxHitPoints) HealSelf();
-
+            if (rr.Next(2) == 1 && CurrentHitPoints < MaxHitPoints) 
+            {
+                HealSelf();
+                OnClaimDamage(new CEnemyEventArgs(dmg, "Attack dodged!"));
+            }
             return base.TakeDamage(dmg, out goldReward);
         }
     }

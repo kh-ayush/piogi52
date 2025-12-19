@@ -22,6 +22,15 @@ namespace MainGame
     /// </summary>
     public partial class MainWindow : Window
     {
+        public event EventHandler<EnemyChangedEventArgs> EnemyChanged;
+        public class EnemyChangedEventArgs : EventArgs
+        {
+            public IEnemy NewEnemy { get; }
+            public EnemyChangedEventArgs(IEnemy newEnemy)
+            {
+                NewEnemy = newEnemy;
+            }
+        }
         public void normalizeChances()
         {
             double sum = 0;
@@ -64,17 +73,28 @@ namespace MainGame
                 sceneSize: new System.Drawing.Size(250, 250)
             );
 
+            //назначение обработчика события добавления объекта в сцену
+            controller.addObject += addObjectInScene;
+            //при удалении объекта срабатывает обработчик удаления
+            controller.removeObject += removeObjectFromScene;
+
+            controller.removeObject += logMessage;
+            EnemyChanged += (s, e) =>
+            {
+                EnemyInfo.DataContext = e.NewEnemy;
+            };
+
             enemyTemps = new CEnemyTemplateList();
             enemyTemps.LoadJson();
             normalizeChances();
             CurrentTemplate = findByChance(rand.NextDouble());
             CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
-            
+
+            CurrentEnemy.claimDamage += enemy_takes_damage;
+            EnemyChanged?.Invoke(this, new EnemyChangedEventArgs(CurrentEnemy));
 
             NextButton.IsEnabled = false;
             RepeatButton.IsEnabled = false;
-
-            EnemyInfo.DataContext = CurrentEnemy;
 
             Player = new CPlayer(
                 1,                    //lvl
@@ -131,8 +151,8 @@ namespace MainGame
             if (CurrentEnemy.IsDead)
             {
                 CurrentEnemy.RecalculateStats(CurrentTemplate, Player.EnemyCount);
-                EnemyInfo.DataContext = CurrentEnemy;
                 CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
+                EnemyChanged?.Invoke(this, new EnemyChangedEventArgs(CurrentEnemy));
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
 
@@ -145,8 +165,8 @@ namespace MainGame
             {
                 CurrentTemplate = findByChance(rand.NextDouble());
                 CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
+                EnemyChanged?.Invoke(this, new EnemyChangedEventArgs(CurrentEnemy));
                 CurrentEnemy.RecalculateStats(CurrentTemplate, Player.EnemyCount);
-                EnemyInfo.DataContext = CurrentEnemy;
                 NextButton.IsEnabled = false;
                 RepeatButton.IsEnabled = false;
 
@@ -171,13 +191,30 @@ namespace MainGame
             Player.LoadPlayer();
             CurrentTemplate = findByChance(rand.NextDouble());
             CurrentEnemy = EnemyFactory.CreateEnemy(CurrentTemplate);
+            EnemyChanged?.Invoke(this, new EnemyChangedEventArgs(CurrentEnemy));
             CurrentEnemy.RecalculateStats(CurrentTemplate, Player.EnemyCount);
-            EnemyInfo.DataContext = CurrentEnemy;
         }
-
         private void SaveGame(object sender, RoutedEventArgs e)
         {
             Player.SavePlayer();
+        }
+        public void enemy_takes_damage(object sender, CEnemyEventArgs e)
+        {
+            StoryListBox.Items.Insert(0, e.msg);
+        }
+        //обработчик события добавление собираемого объекта в сцену
+        public void addObjectInScene(object sender, CControllerEventArgs e)
+        {
+            GameCanvas.Children.Add(e.sprite);
+        }
+        //обработчик события удаления собираемого объекта из сцены
+        public void removeObjectFromScene(object sender, CControllerEventArgs e)
+        {
+            GameCanvas.Children.Remove(e.sprite);
+        }
+        public void logMessage(object sender, CControllerEventArgs e)
+        {
+            StoryListBox.Items.Insert(0, e.msg);
         }
     }
 }

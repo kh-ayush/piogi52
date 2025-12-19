@@ -12,10 +12,11 @@ namespace MainGame.Classes
         private System.Drawing.Size size;
         private double lifetime;
         private Ellipse sprite;
-        private int bonustype = -1;
+        private string message;
 
         public double Lifetime => lifetime;
         public Ellipse Sprite => sprite;
+        public string Message => message;
 
         public CObject(System.Drawing.Point position, double size, double lifetime)
         {
@@ -36,6 +37,7 @@ namespace MainGame.Classes
         }
         protected abstract Brush GetFillBrush();
         protected abstract void GetBonus(CPlayer player);
+        public Ellipse GetSprite() { return Sprite; }
         public void ApplyBonus(CPlayer player)
         {
             GetBonus(player);
